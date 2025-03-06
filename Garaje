@@ -1,0 +1,98 @@
+using System;
+
+// Clase Motor que representa el motor del coche
+class Motor {
+    private int litrosDeAceite;
+    private int potencia;
+
+    public Motor(int potencia) {
+        this.potencia = potencia;
+        this.litrosDeAceite = 0;
+    }
+
+    // Getters
+    public int GetLitrosDeAceite() {
+        return litrosDeAceite;
+    }
+
+    public int GetPotencia() {
+        return potencia;
+    }
+
+    // Setters
+    public void SetLitrosDeAceite(int litros) {
+        this.litrosDeAceite = litros;
+    }
+
+    public void SetPotencia(int potencia) {
+        this.potencia = potencia;
+    }
+}
+
+// Clase Coche que representa un coche con su marca, modelo y motor
+class Coche {
+    private Motor motor;
+    private string marca;
+    private string modelo;
+    private double precioAverias;
+
+    // Constructor que inicializa la marca y el modelo
+    public Coche(string marca, string modelo) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.motor = new Motor(100); // Valor por defecto de potencia
+        this.precioAverias = 0.0;
+    }
+
+    // Getters para obtener información del coche
+    public string GetMarca() {
+        return marca;
+    }
+
+    public string GetModelo() {
+        return modelo;
+    }
+
+    public double GetPrecioAverias() {
+        return precioAverias;
+    }
+
+    public Motor GetMotor() {
+        return motor;
+    }
+
+    // Método para acumular el importe de una avería
+    public void AcumularAveria(double importe) {
+        this.precioAverias += importe;
+    }
+}
+
+// Clase Garaje que gestiona la reparación de coches
+class Garaje {
+    private Coche cocheActual;
+    private string averiaActual;
+    private int cochesAtendidos;
+
+    public Garaje() {
+        this.cocheActual = null;
+        this.averiaActual = "";
+        this.cochesAtendidos = 0;
+    }
+
+    // Método para aceptar un coche en el garaje
+    public bool AceptarCoche(Coche coche, string averia) {
+        if (this.cocheActual != null) {
+            return false; // Ya hay un coche en el garaje
+        }
+        this.cocheActual = coche;
+        this.averiaActual = averia;
+        this.cochesAtendidos++;
+        return true;
+    }
+
+    // Método para devolver un coche después de la reparación
+    public void DevolverCoche() {
+        this.cocheActual = null;
+        this.averiaActual = "";
+    }
+}
