@@ -1,0 +1,134 @@
+using System;
+
+// Clase Motor que representa el motor del coche
+class Motor {
+    private int litrosDeAceite;
+    private int potencia;
+
+    public Motor(int potencia) {
+        this.potencia = potencia;
+        this.litrosDeAceite = 0;
+    }
+
+    // Getters
+    public int GetLitrosDeAceite() {
+        return litrosDeAceite;
+    }
+
+    public int GetPotencia() {
+        return potencia;
+    }
+
+    // Setters
+    public void SetLitrosDeAceite(int litros) {
+        this.litrosDeAceite = litros;
+    }
+
+    public void SetPotencia(int potencia) {
+        this.potencia = potencia;
+    }
+}
+
+// Clase Coche que representa un coche con su marca, modelo y motor
+class Coche {
+    private Motor motor;
+    private string marca;
+    private string modelo;
+    private double precioAverias;
+
+    // Constructor que inicializa la marca y el modelo
+    public Coche(string marca, string modelo) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.motor = new Motor(100); // Valor por defecto de potencia
+        this.precioAverias = 0.0;
+    }
+
+    // Getters para obtener información del coche
+    public string GetMarca() {
+        return marca;
+    }
+
+    public string GetModelo() {
+        return modelo;
+    }
+
+    public double GetPrecioAverias() {
+        return precioAverias;
+    }
+
+    public Motor GetMotor() {
+        return motor;
+    }
+
+    // Método para acumular el importe de una avería
+    public void AcumularAveria(double importe) {
+        this.precioAverias += importe;
+    }
+}
+
+// Clase Garaje que gestiona la reparación de coches
+class Garaje {
+    private Coche cocheActual;
+    private string averiaActual;
+    private int cochesAtendidos;
+
+    public Garaje() {
+        this.cocheActual = null;
+        this.averiaActual = "";
+        this.cochesAtendidos = 0;
+    }
+
+    // Método para aceptar un coche en el garaje
+    public bool AceptarCoche(Coche coche, string averia) {
+        if (this.cocheActual != null) {
+            return false; // Ya hay un coche en el garaje
+        }
+        this.cocheActual = coche;
+        this.averiaActual = averia;
+        this.cochesAtendidos++;
+        
+        double costeAveria = new Random().Next(100, 501);
+        coche.AcumularAveria(costeAveria);
+        
+        if (averia.Equals("aceite", StringComparison.OrdinalIgnoreCase)) {
+            coche.GetMotor().SetLitrosDeAceite(coche.GetMotor().GetLitrosDeAceite() + 10);
+        }
+        return true;
+    }
+
+    // Método para devolver un coche después de la reparación
+    public void DevolverCoche() {
+        this.cocheActual = null;
+        this.averiaActual = "";
+    }
+}
+
+// Clase principal PracticaPOO para ejecutar el programa
+class PracticaPOO {
+    static void Main() {
+        // Creación del garaje y de los coches
+        Garaje garaje = new Garaje();
+        Coche coche1 = new Coche("Toyota", "Corolla");
+        Coche coche2 = new Coche("Honda", "Civic");
+
+        // Lista de posibles averías
+        string[] averias = {"aceite", "frenos", "motor", "suspensión"};
+        Random rand = new Random();
+
+        // Los coches entran al menos dos veces al garaje
+        for (int i = 0; i < 2; i++) {
+            if (garaje.AceptarCoche(coche1, averias[rand.Next(averias.Length)])) {
+                garaje.DevolverCoche();
+            }
+            if (garaje.AceptarCoche(coche2, averias[rand.Next(averias.Length)])) {
+                garaje.DevolverCoche();
+            }
+        }
+
+        // Mostrar información final de los coches
+        Console.WriteLine("Información de los coches después de las reparaciones:");
+        Console.WriteLine($"Coche 1: {coche1.GetMarca()} {coche1.GetModelo()} - Total averías: ${coche1.GetPrecioAverias()} - Litros de aceite: {coche1.GetMotor().GetLitrosDeAceite()}");
+        Console.WriteLine($"Coche 2: {coche2.GetMarca()} {coche2.GetModelo()} - Total averías: ${coche2.GetPrecioAverias()} - Litros de aceite: {coche2.GetMotor().GetLitrosDeAceite()}");
+    }
+}
